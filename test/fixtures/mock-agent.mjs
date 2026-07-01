@@ -40,7 +40,12 @@ async function main() {
 
   if (mode === 'timeout') {
     // Never exits on its own within any reasonable test timeout; the parent must kill it.
-    await new Promise(() => {})
+    // A bare `await new Promise(() => {})` does NOT keep Node's event loop alive (no
+    // libuv handle is registered, so the process would just exit on its own once the
+    // microtask queue drains). An active interval timer does keep it alive, so only an
+    // external SIGTERM/SIGKILL can stop this process — which is exactly what we need to
+    // exercise the parent's timeout-kill path.
+    setInterval(() => {}, 1 << 30)
     return
   }
 

@@ -233,8 +233,8 @@
 {/if}
 
 {#if showKeys}
-  <div class="keys" role="dialog" aria-label="Keyboard shortcuts" onclick={() => (showKeys = false)} onkeydown={(e) => e.key === 'Escape' && (showKeys = false)} tabindex="-1">
-    <div class="keys-card card" onclick={(e) => e.stopPropagation()}>
+  <div class="keys" role="dialog" aria-label="Keyboard shortcuts" onclick={(e) => { if (e.target === e.currentTarget) showKeys = false }} onkeydown={(e) => e.key === 'Escape' && (showKeys = false)} tabindex="-1">
+    <div class="keys-card card">
       <h3>Keyboard shortcuts</h3>
       <div class="krow"><kbd>J</kbd> <kbd>K</kbd> <span>Next / previous citation</span></div>
       <div class="krow"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> <span>To do · In progress · Done &amp; next · Blocked</span></div>

@@ -39,7 +39,7 @@ describe('matchSourceForFootnote', () => {
   })
 
   it('matches on key tokens split across letter/digit boundaries', () => {
-    const fn = { rawText: 'See UL 9540A, 4th ed.' }
+    const fn = { rawText: 'See UL 9540A Test Method, 4th ed.' }
     const match = matchSourceForFootnote(fn, registerSources)
     expect(match?.key).toBe('UL9540A')
   })
