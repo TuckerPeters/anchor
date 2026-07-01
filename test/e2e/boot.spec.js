@@ -65,6 +65,24 @@ test('full pipeline through the app: create → import bytes → build → ready
   await app.close()
 })
 
+test('walks every page on the demo (confidence states, Map, Handoff, Setup)', async () => {
+  const { app, win } = await launch()
+  await win.locator('.doc.demo').first().click()
+  await expect(win.locator('.q-head')).toContainText(/to resolve/i)
+  await expect(win.locator('.banner')).toContainText(/located/i)                 // located state
+  await win.locator('.row', { hasText: 'Bench testing' }).click()
+  await expect(win.locator('.banner')).toContainText(/couldn.t pinpoint/i)       // none state
+  await win.locator('.row', { hasText: 'Federal rulemaking' }).click()
+  await expect(win.locator('.banner')).toContainText(/approximate/i)             // approximate state
+  await win.getByRole('button', { name: /^map$/i }).click()                       // Map
+  await expect(win.locator('.node').first()).toBeVisible()
+  await win.getByRole('button', { name: /^handoff$/i }).click()                   // Handoff
+  await expect(win.getByText(/next reviewer needs to decide/i)).toBeVisible()
+  await win.locator('.ai').click()                                                // Setup via AI chip
+  await expect(win.getByText(/works fully without ai/i)).toBeVisible()
+  await app.close()
+})
+
 test('creates a new document', async () => {
   const { app, win } = await launch()
   await win.getByRole('button', { name: /new report/i }).first().click()

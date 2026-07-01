@@ -50,7 +50,11 @@
 
   const demo = $derived(items.find((i) => i.doc.isDemo))
   const mine = $derived(items.filter((i) => !i.doc.isDemo))
+
+  function onKey(e) { if (showNew && e.key === 'Escape') showNew = false }
 </script>
+
+<svelte:window onkeydown={onKey} />
 
 <div class="page">
   <div class="head">
