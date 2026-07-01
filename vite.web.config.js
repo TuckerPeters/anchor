@@ -12,5 +12,6 @@ export default defineConfig({
   base: './',
   resolve: { alias: { '@shared': r('shared'), '@lib': r('src/renderer/lib') } },
   server: { port: 5178, fs: { allow: [r('.')] } },
+  build: { outDir: r('dist-web'), emptyOutDir: true },
   plugins: [svelte()]
 })
