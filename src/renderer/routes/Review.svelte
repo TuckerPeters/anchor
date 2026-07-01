@@ -9,8 +9,25 @@
   import PdfPage from '../components/PdfPage.svelte'
   import StatusPicker from '../components/StatusPicker.svelte'
   import AiBadge from '../components/AiBadge.svelte'
+  import EgressConsent from '../components/EgressConsent.svelte'
 
   let { docId = null } = $props()
+  let showConsent = $state(false)
+  let aiEngine = $state('claude')
+
+  async function enhance() {
+    const d = await api.ai.detect()
+    const eng = d.claude?.signedIn ? 'claude' : d.codex?.signedIn ? 'codex' : null
+    if (!eng) { go('setup'); return }
+    aiEngine = eng
+    showConsent = true
+  }
+  async function confirmEnhance() {
+    showConsent = false
+    await api.ai.consent(docId, { engine: aiEngine })
+    const { jobId } = await api.documents.enhance(docId, { engine: aiEngine })
+    go('analyze', { docId, jobId })
+  }
 
   let doc = $state(null)
   let graph = $state(null)
@@ -134,7 +151,7 @@
       {#if cov}
         <div class="cov"><b class="tnum">{cov.done}</b> <span class="faint">/ {cov.total} resolved</span></div>
       {/if}
-      <button class="btn sm" onclick={() => go('setup')}><Icon name="sparkles" size={14} /> Enhance with AI</button>
+      <button class="btn sm" onclick={enhance}><Icon name="sparkles" size={14} /> Enhance with AI</button>
     </header>
 
     {#if orphanCount > 0}
@@ -209,6 +226,10 @@
       </section>
     </div>
   </div>
+{/if}
+
+{#if showConsent}
+  <EgressConsent engine={aiEngine} onconfirm={confirmEnhance} oncancel={() => (showConsent = false)} />
 {/if}
 
 {#if showKeys}
