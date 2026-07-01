@@ -1,5 +1,7 @@
 // Copyright © 2026 Tucker Peters. Authored independently, in the author's personal time. Licensed under the Apache License, Version 2.0.
 import { test, expect, _electron as electron } from '@playwright/test'
+import { buildMinimalPdf } from '../fixtures/makePdf.js'
+import { buildDocxFixture, wrapDocumentXml, wrapFootnotesXml } from '../fixtures/makeDocx.js'
 
 async function launch() {
   const app = await electron.launch({ args: ['.'] })
@@ -27,6 +29,39 @@ test('opens the demo, resolves an item, and the queue count drops', async () => 
   await expect(win.getByText(/marked "done"/i)).toBeVisible()
   const after = parseInt(await win.locator('.q-head .big').first().innerText(), 10)
   expect(after).toBe(before - 1)
+  await app.close()
+})
+
+test('full pipeline through the app: create → import bytes → build → ready graph', async () => {
+  const { app, win } = await launch()
+  const CLAIM = 'Photovoltaic efficiency rises as cell temperature falls'
+  const body = `<w:p w14:paraId="P1"><w:r><w:t xml:space="preserve">${CLAIM}</w:t></w:r><w:r><w:footnoteReference w:id="2"/></w:r></w:p>`
+  const footnotes = wrapFootnotesXml(
+    `<w:footnote w:type="separator" w:id="-1"><w:p><w:r><w:separator/></w:r></w:p></w:footnote>` +
+    `<w:footnote w:type="continuationSeparator" w:id="0"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote>` +
+    `<w:footnote w:id="2"><w:p><w:r><w:t>Green et al., Solar Cell Efficiency Tables 45 (2021).</w:t></w:r></w:p></w:footnote>`
+  )
+  const docxB64 = buildDocxFixture({ documentXml: wrapDocumentXml(body), footnotesXml: footnotes }).toString('base64')
+  const pdfB64 = buildMinimalPdf([{ width: 320, height: 200, items: [{ text: CLAIM, x: 30, y: 150, size: 12 }] }]).toString('base64')
+
+  const result = await win.evaluate(async ({ docxB64, pdfB64 }) => {
+    const toBuf = (b) => { const bin = atob(b); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u.buffer }
+    const doc = await window.anchor.documents.create({ title: 'Pipeline GUI' })
+    await window.anchor.documents.saveFiles(doc.id, { docx: { name: 'r.docx', bytes: toBuf(docxB64) }, pdf: { name: 'r.pdf', bytes: toBuf(pdfB64) } })
+    await window.anchor.documents.build(doc.id)
+    for (let i = 0; i < 60; i++) {
+      const d = await window.anchor.documents.get(doc.id)
+      if (d.status === 'ready') { const g = await window.anchor.documents.getGraph(doc.id); return { status: 'ready', stats: d.stats, located: g.nodes.claims[0]?.anchor?.state } }
+      if (d.status === 'failed') return { status: 'failed' }
+      await new Promise((r) => setTimeout(r, 150))
+    }
+    return { status: 'timeout' }
+  }, { docxB64, pdfB64 })
+
+  expect(result.status).toBe('ready')
+  expect(result.stats.footnotes).toBe(1)
+  expect(result.stats.claims).toBeGreaterThanOrEqual(1)
+  expect(result.located).toBe('located')
   await app.close()
 })
 

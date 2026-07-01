@@ -11,7 +11,8 @@ function demoResourceDir() {
     const packaged = join(process.resourcesPath, 'demo')
     if (existsSync(packaged)) return packaged
   }
-  return join(import.meta.dirname, '..', '..', '..', 'resources', 'demo')
+  // built main lives at out/main/ -> repo root is two levels up
+  return join(import.meta.dirname, '..', '..', 'resources', 'demo')
 }
 
 export function seedDemoDocument(root) {
