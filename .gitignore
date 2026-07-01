@@ -6,3 +6,5 @@ release/
 *.log
 documents/
 coverage/
+
+qa-shot.mjs

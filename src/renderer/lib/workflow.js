@@ -55,6 +55,14 @@ export const QUEUE_KINDS = [
   { key: 'support', label: 'Support to verify', hint: 'A source is identified but its support for the claim is unverified.' }
 ]
 
+export const RESOLVE_HINTS = {
+  'missing-source': 'Identify the real source this footnote points to and record it below, then set Source found. If it genuinely can\'t be found, mark Blocked with a note for the next reviewer.',
+  'needs-pincite': 'Find the exact page, section, docket number, edition, or commit hash and record it below, then set Support verified.',
+  'cross-reference': 'Confirm the internal section this "see supra/infra" points to, note it below, then mark Done.',
+  'reused-source': 'This source is cited in several places. Resolve it once here and every citation that uses it updates together.',
+  'support': 'Check that the source actually supports this claim, record what you found, then set Support verified.'
+}
+
 function footnoteKind(fn, source) {
   if (fn.role === 'cross-reference' || fn.class === 'cross-reference') return 'cross-reference'
   if (fn.class === 'missing' || !source) return 'missing-source'
