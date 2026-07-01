@@ -16,6 +16,20 @@ Everything runs on your machine. Your documents never leave it.
 
 ---
 
+## Try it now — no install
+
+### ▶ https://tuckerpeters.github.io/anchor/
+
+Runs entirely in your browser on **Windows or Mac** (any modern browser), with no install and
+no risk of an app crash. Open it, explore the built-in sample, or import your own Word draft +
+PDF — the full **Standard review** (mapping, the queue, highlighted pages, handoff) runs
+**client-side; nothing is uploaded**. Your review is saved locally in the browser.
+
+AI *suggestions* are the only thing the browser version can't do — those need the desktop app
+(they drive a local CLI agent). Everything else is identical.
+
+---
+
 ## Why it exists
 
 Expert reports live and die by their citations: the right source, the right pincite, the
@@ -68,11 +82,15 @@ Every AI value is shown as a **labeled suggestion** — never as a decision. You
 
 ## Install
 
-### The app
+### Browser (nothing to install)
+Just open **https://tuckerpeters.github.io/anchor/**. Full Standard review, client-side, on
+Windows or Mac. Best if you want to try it now or avoid installing anything.
+
+### Desktop app (adds optional AI)
 Download the latest `Anchor.dmg` (macOS) or `Anchor.exe` (Windows) from
 [Releases](https://github.com/tuckerpeters/anchor/releases), or build it yourself (below).
 On first launch you'll land on a **sample report** you can explore immediately — no setup,
-no upload.
+no upload. The desktop app adds optional AI suggestions via your Claude/ChatGPT subscription.
 
 ### AI setup (optional, one time)
 If you want AI suggestions, run the installer for your platform. It installs everything a

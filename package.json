@@ -11,6 +11,7 @@
     "build": "electron-vite build",
     "start": "electron-vite preview",
     "web": "vite --config vite.web.config.js",
+    "build:web": "vite build --config vite.web.config.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
