@@ -54,9 +54,13 @@ export async function invokeAgent(engine, prompt, opts = {}) {
       let killTimer = null
       let abortListener = null
 
+      // NOTE: killTimer (the SIGKILL grace-period fallback) is deliberately NOT cleared
+      // here. We resolve the caller's promise as soon as we've *sent* the kill signal,
+      // without waiting for the process to actually die — but the SIGKILL safety net must
+      // keep running independently in case SIGTERM was ignored, otherwise a wedged
+      // process would survive forever. It is cleared once the child actually exits.
       const cleanup = () => {
         if (timer) clearTimeout(timer)
-        if (killTimer) clearTimeout(killTimer)
         if (signal && abortListener) {
           try {
             signal.removeEventListener('abort', abortListener)
@@ -122,6 +126,14 @@ export async function invokeAgent(engine, prompt, opts = {}) {
         } else {
           const errText = Buffer.concat(stderrChunks).toString('utf8')
           resolve({ ok: false, text, error: errText || 'exit ' + code })
+        }
+      })
+
+      // The process actually died — the SIGKILL grace-period fallback is no longer needed.
+      child.on('exit', () => {
+        if (killTimer) {
+          clearTimeout(killTimer)
+          killTimer = null
         }
       })
 
