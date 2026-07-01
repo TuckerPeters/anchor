@@ -1,0 +1,13 @@
+{
+  "id": "demo",
+  "title": "Sample: Thermal Runaway in Lithium-Ion Packs",
+  "status": "ready",
+  "createdAt": "2026-06-01T00:00:00Z",
+  "updatedAt": "2026-06-01T00:00:00Z",
+  "graphVersion": 1,
+  "inputs": { "docx": "sample-report.docx", "pdf": "sample-report.pdf", "register": "sources.md" },
+  "stats": { "pages": 3, "claims": 7, "footnotes": 7, "sources": 5, "targets": 1, "edges": 27 },
+  "ai": { "used": false, "engine": null, "lastUsedAt": null },
+  "flags": { "textLayer": true, "scanned": false, "singleFile": false },
+  "isDemo": true
+}

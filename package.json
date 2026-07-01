@@ -1,0 +1,47 @@
+{
+  "name": "anchor",
+  "version": "0.1.0",
+  "description": "Anchor — a local, private desktop workbench for reviewing expert-report citations.",
+  "author": "Tucker Peters",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "web": "vite --config vite.web.config.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test",
+    "package": "electron-vite build && electron-builder",
+    "package:dir": "electron-vite build && electron-builder --dir"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "diff-match-patch": "^1.0.5",
+    "fast-xml-parser": "^4.5.0",
+    "fflate": "^0.8.2",
+    "pdfjs-dist": "^4.8.69"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.2",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "svelte": "^5.2.7",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.6"
+  },
+  "build": {
+    "appId": "com.tuckerpeters.anchor",
+    "productName": "Anchor",
+    "directories": { "output": "release" },
+    "files": ["out/**/*", "resources/**/*"],
+    "extraResources": [{ "from": "resources/demo", "to": "demo" }],
+    "mac": { "category": "public.app-category.productivity", "target": ["dmg"] },
+    "win": { "target": ["nsis"] },
+    "linux": { "target": ["AppImage"] }
+  }
+}

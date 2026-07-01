@@ -1,0 +1,11 @@
+{
+  "documentId": "demo",
+  "graphVersion": 1,
+  "updatedAt": "2026-06-01T00:00:00Z",
+  "nodes": {
+    "s-nrel-2021": { "status": "done", "substep": null, "note": "Confirmed 2021 edition, page 12 and page 14.", "resolution": "Canonical cite: NREL (2021), pp. 12, 14.", "updatedAt": "2026-06-01T00:00:00Z", "seq": 1 },
+    "f1": { "status": "done", "substep": null, "note": "", "resolution": "", "updatedAt": "2026-06-01T00:00:00Z", "seq": 1 },
+    "s-doe-docket": { "status": "blocked", "substep": null, "note": "Docket number is missing from the source register — need the responsible attorney to confirm.", "resolution": "", "updatedAt": "2026-06-01T00:00:00Z", "seq": 1 }
+  },
+  "orphans": []
+}

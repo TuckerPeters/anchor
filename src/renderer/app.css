@@ -1,0 +1,153 @@
+/* Copyright © 2026 Tucker Peters. Authored independently, in the author's personal time. Apache-2.0. */
+
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+
+  /* Type */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-read: "Iowan Old Style", "Palatino Linotype", "Charter", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --fs-11: 0.6875rem; --fs-12: 0.75rem; --fs-13: 0.8125rem; --fs-14: 0.875rem;
+  --fs-15: 0.9375rem; --fs-16: 1rem; --fs-18: 1.125rem; --fs-21: 1.3125rem;
+  --fs-26: 1.625rem; --fs-32: 2rem;
+
+  /* Space */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
+  --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
+
+  /* Radius */
+  --r-1: 6px; --r-2: 10px; --r-3: 14px; --r-4: 20px; --r-full: 999px;
+
+  /* Light palette */
+  --bg: #f5f4f1;
+  --surface: #ffffff;
+  --surface-2: #faf9f6;
+  --surface-3: #efede8;
+  --border: #e4e1da;
+  --border-strong: #d3cfc6;
+  --text: #1b1d21;
+  --text-2: #565b63;
+  --text-3: #8a8f98;
+  --accent: #3a4ecc;
+  --accent-hover: #3143b4;
+  --accent-weak: #eceefb;
+  --accent-text: #ffffff;
+
+  /* Status (colorblind-safe, always paired with an icon + label) */
+  --st-todo: #7b828d;      --st-todo-bg: #edecea;   --st-todo-fg: #4a4f57;
+  --st-progress: #b06f10;  --st-progress-bg: #fbefd8; --st-progress-fg: #8a560b;
+  --st-done: #2c8a58;      --st-done-bg: #e2f2e8;   --st-done-fg: #1f6b43;
+  --st-blocked: #c03e33;   --st-blocked-bg: #fbe6e3; --st-blocked-fg: #97281f;
+
+  /* Highlight on the rendered page */
+  --hl: rgba(255, 204, 74, 0.42);
+  --hl-border: rgba(210, 150, 10, 0.9);
+  --hl-approx: rgba(176, 111, 16, 0.16);
+
+  --shadow-1: 0 1px 2px rgba(20, 22, 28, 0.06), 0 1px 3px rgba(20, 22, 28, 0.05);
+  --shadow-2: 0 4px 14px rgba(20, 22, 28, 0.09), 0 1px 4px rgba(20, 22, 28, 0.06);
+  --shadow-3: 0 14px 40px rgba(20, 22, 28, 0.16);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e1116;
+  --surface: #171b21;
+  --surface-2: #1c212a;
+  --surface-3: #232a34;
+  --border: #29303a;
+  --border-strong: #38414d;
+  --text: #e8eaed;
+  --text-2: #a2a9b4;
+  --text-3: #6d7581;
+  --accent: #8091ff;
+  --accent-hover: #97a4ff;
+  --accent-weak: #1b2233;
+  --accent-text: #0e1116;
+
+  --st-todo: #8a929e;      --st-todo-bg: #232830;   --st-todo-fg: #b3bac4;
+  --st-progress: #e0a53a;  --st-progress-bg: #2e2717; --st-progress-fg: #f0c072;
+  --st-done: #4bb47c;      --st-done-bg: #16281f;   --st-done-fg: #7fd6a4;
+  --st-blocked: #e2685c;   --st-blocked-bg: #2c1a19; --st-blocked-fg: #f0958c;
+
+  --hl: rgba(255, 210, 90, 0.30);
+  --hl-border: rgba(255, 200, 70, 0.85);
+  --hl-approx: rgba(224, 165, 58, 0.14);
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-3: 0 18px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+html, body, #app { height: 100%; margin: 0; }
+body {
+  font-family: var(--font-ui);
+  font-size: var(--fs-14);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-variant-numeric: tabular-nums;
+}
+#app { display: flex; flex-direction: column; }
+
+h1, h2, h3, h4, p { margin: 0; }
+button { font-family: inherit; }
+a { color: var(--accent); text-decoration: none; }
+
+::selection { background: var(--accent-weak); }
+
+/* Tabular numerals everywhere numbers matter */
+.tnum { font-variant-numeric: tabular-nums; }
+.reading { font-family: var(--font-read); }
+.mono { font-family: var(--font-mono); }
+
+/* Scrollbars */
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--r-full); border: 2px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover { background: var(--text-3); background-clip: content-box; }
+
+/* Focus */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-1); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  padding: 8px 14px; border-radius: var(--r-2); border: 1px solid var(--border-strong);
+  background: var(--surface); color: var(--text); font-size: var(--fs-14); font-weight: 500;
+  cursor: pointer; transition: background 120ms var(--ease), border-color 120ms var(--ease), transform 80ms var(--ease);
+  white-space: nowrap;
+}
+.btn:hover { background: var(--surface-2); border-color: var(--text-3); }
+.btn:active { transform: translateY(0.5px); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+.btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.ghost:hover { background: var(--surface-3); }
+.btn.sm { padding: 5px 10px; font-size: var(--fs-13); border-radius: var(--r-1); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px; border-radius: var(--r-full); font-size: var(--fs-12); font-weight: 550;
+  border: 1px solid transparent;
+}
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-3); box-shadow: var(--shadow-1);
+}
+
+.muted { color: var(--text-2); }
+.faint { color: var(--text-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
